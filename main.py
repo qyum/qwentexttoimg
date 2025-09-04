@@ -40,13 +40,13 @@ else:
 pipe = DiffusionPipeline.from_pretrained(model_name, torch_dtype=torch_dtype)
 
 # Enable VRAM optimizations
-pipe.enable_attention_slicing()
-pipe.enable_sequential_cpu_offload()  # saves a lot of VRAM
+# pipe.enable_attention_slicing()
+# pipe.enable_sequential_cpu_offload()  # saves a lot of VRAM
 
-try:
-    pipe.enable_xformers_memory_efficient_attention()
-except Exception:
-    print("⚠️ xformers not available")
+# try:
+#     pipe.enable_xformers_memory_efficient_attention()
+# except Exception:
+#     print("⚠️ xformers not available")
 
 # ----------------------------
 # Helpers
