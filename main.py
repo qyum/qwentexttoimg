@@ -18,7 +18,7 @@ app.add_middleware(
 # ----------------------------
 # FastAPI setup
 # ----------------------------
-router = APIRouter()
+#router = APIRouter()
 # ----------------------------
 
 
@@ -75,12 +75,12 @@ default_width, default_height = aspect_ratios["16:9"]
  
 
 
-@router.get("/")
+@app.get("/")
 def get_request():
     return {"Hello": "texttoimage"}
 
 
-@router.post("/generate")
+@app.post("/generate")
 def generate_image(request: PromptRequest):
     """
     Generate an image from a text prompt.

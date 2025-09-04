@@ -1,0 +1,49 @@
+# Python compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+checkpoints/
+*checkpoints/
+.checkpoints/
+
+# Virtual environment
+venv/
+ENV/
+*venv/
+.venv/
+
+# Logs
+*.log
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# PyCharm / VSCode
+.idea/
+.vscode/
+
+# Text/data files
+*.sqlite3
+*.db
+*.csv
+*.tsv
+
+# Images (optional if you don't want to track media files)
+*.jpg
+*.jpeg
+*.png
+*.gif
+
+# Temporary files
+*.tmp
+*.swp
