@@ -73,7 +73,7 @@ negative_prompt = ""  # empty negative prompt
 
 aspect_ratios = {
     "1:1": (768, 768),
-    "16:9": (224, 224),  # reduced to avoid OOM
+    "16:9": (512, 512),  # reduced to avoid OOM
     "9:16": (540, 960),
     "4:3": (896, 672),
     "3:4": (672, 896),
