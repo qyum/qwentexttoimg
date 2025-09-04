@@ -33,13 +33,13 @@ class PromptRequest(BaseModel):
 model_name = "Qwen/Qwen-Image"
 
 if torch.cuda.is_available():
-    torch_dtype = torch.float16
+    torch_dtype = torch.bfloat16
 else:
     torch_dtype = torch.float32
 
 pipe = DiffusionPipeline.from_pretrained(model_name, torch_dtype=torch_dtype)
 
-# Enable VRAM optimizations
+
 pipe.enable_attention_slicing()
 # pipe.enable_sequential_cpu_offload()  # saves a lot of VRAM
 
@@ -58,7 +58,7 @@ negative_prompt = " "  # empty negative prompt
 # Different safe aspect ratios
 aspect_ratios = {
     "1:1": (768, 768),
-    "16:9": (512, 512),   # reduced to avoid OOM
+    "16:9": (224, 224),   # reduced to avoid OOM
     "9:16": (540, 960),
     "4:3": (896, 672),
     "3:4": (672, 896),
