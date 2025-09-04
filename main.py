@@ -103,7 +103,7 @@ def generate_image(request: PromptRequest):
             negative_prompt=negative_prompt,
             width=width,
             height=height,
-            num_inference_steps=25,
+            num_inference_steps=50,
             guidance_scale=7.5,
             generator=generator
         ).images[0]
