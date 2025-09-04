@@ -40,17 +40,15 @@ else:
 pipe = DiffusionPipeline.from_pretrained(model_name, torch_dtype=torch_dtype)
 
 # Enable VRAM optimizations
-# pipe.enable_attention_slicing()
+pipe.enable_attention_slicing()
 # pipe.enable_sequential_cpu_offload()  # saves a lot of VRAM
 
-# try:
-#     pipe.enable_xformers_memory_efficient_attention()
-# except Exception:
-#     print("⚠️ xformers not available")
+try:
+    pipe.enable_xformers_memory_efficient_attention()
+except Exception:
+    print("xformers not available")
 
-# ----------------------------
-# Helpers
-# ----------------------------
+ 
 positive_magic = {
     "en": ", Ultra HD, 4K, cinematic composition.",
     "zh": ", 超清，4K，电影级构图."
@@ -80,35 +78,37 @@ def get_request():
     return {"Hello": "texttoimage"}
 
 
+# Move pipeline to GPU if available
+device = "cuda" if torch.cuda.is_available() else "cpu"
+pipe = pipe.to(device)
+print(device)
+
+
 @app.post("/generate")
 def generate_image(request: PromptRequest):
-    """
-    Generate an image from a text prompt.
-    Retries with smaller resolution if CUDA runs OOM.
-    """
     prompt = request.prompt + positive_magic["en"]
-
     width, height = default_width, default_height
 
-    # Try to generate, fallback if OOM
     try:
+        # Make generator on the same device as pipeline
+        generator = torch.Generator(device=device).manual_seed(42)
+
         image = pipe(
             prompt=prompt,
             negative_prompt=negative_prompt,
             width=width,
             height=height,
-            num_inference_steps=50,  # reduced for speed + VRAM
+            num_inference_steps=25,
             guidance_scale=7.5,
-            generator=torch.Generator(device="cuda" if torch.cuda.is_available() else "cpu").manual_seed(42)
+            generator=generator
         ).images[0]
 
     except torch.cuda.OutOfMemoryError:
-        print("⚠️ CUDA OOM: retrying with smaller resolution...")
-        
+        print("CUDA OOM: retrying with smaller resolution...")
+        # Optional: implement fallback logic here
 
     # Save to buffer
     buf = io.BytesIO()
     image.save(buf, format="PNG")
     buf.seek(0)
-
-    return StreamingResponse(buf, media_type="image/png")
+    return StreamingResponse(buf, media_type="image/png")             

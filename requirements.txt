@@ -8,3 +8,4 @@ torchvision
 diffusers
 transformers
 accelerate
+xformers
